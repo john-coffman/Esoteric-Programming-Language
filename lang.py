@@ -38,9 +38,8 @@ room: "(" id size door+  ")"
 id: WORD
 size: NUMBER "by" NUMBER
 
-door: "[" direction location "]"
-direction: WORD "wall"
-location: "->" WORD
+door: "[" direction "]"
+direction: WORD "wall ->" WORD
 
 end: "."
 
@@ -50,84 +49,67 @@ end: "."
 %ignore WS
 """
 
+def eval_door(door):
+    door_pointer = {
+        "north": None,
+        "south": None,
+        "east": None,
+        "west": None,
+    }
+    for i in door:
+        door_pointer[str(i.children[0].children[0])] = str(i.children[0].children[1])
+    return (door_pointer)
+
 def run_tree(t, env):
-  if t.data == 'room_list':
-    for child in t.children:
-      run_tree(child, env)
-  elif t.data == 'room':
-    for child in t.children:
-      run_tree(child, env)
-    for i in env['already_made']:
-        if(str(env['curr_id']) != i):
-            y = str(env['curr_id'])
-            env['room'] = room(str(env['curr_id']) , env['curr_room'], env['doors'])
-            env['map'][str(env['curr_id'])] = env['room']
-            print(env['doors'])
-            env['already_made'].append(str(env['curr_id']))
-            if(i == None):
-                env['already_made'].remove(None)
-            env['curr_room'] = None  
-  elif t.data == 'id':
-    for t in t.children:
-      env['curr_id'] = t
-  elif t.data == 'size':
-    for t in t.children:
-      env['size'].append(t)
-    x = int(env['size'][0])
-    y = int(env['size'][1])
-    env['curr_room'] = makeHouse(x,y)
-    env['size'].clear()
-  elif t.data == 'door':
-    for child in t.children:
-      run_tree(child, env)
-    env['doors'][str(env['direction'])] = str(env['location'])
-  elif t.data == 'direction':
-    for t in t.children:
-      env['direction'] = t
-  elif t.data == 'location':
-    for t in t.children:
-      env['location'] = t
-  elif t.data == 'end':
-      curr_location = env['map']['A']
-      newRoom = True
-      while(1):
-         
+    if t.data == 'room_list':
+        for child in t.children:
+            run_tree(child, env)
+    elif t.data == 'room':
+        holder = []
+        for child in t.children:
+            holder.append(child)
+        for i in range(len(holder)):
+            if(i == 0):
+                id = holder[i].children[0]
+            if(i == 1):
+                width = holder[i].children[0]
+                height = holder[i].children[1]
+            if(i == 2):
+                doors = []
+                doors.append(holder[i])
+            if(i >= 3):
+                doors.append(holder[i])
+        doors = eval_door(doors)
+        r = room(str(id), makeHouse(int(width), int(height)), doors)
+        env['map'][str(id)] = r
+    elif t.data == 'end':
+        curr_location = env['map']['A']
+        newRoom = True
+        while(1):
           if (newRoom == True):
             printHouse(curr_location.outline)
+          print("Your map", curr_location.directions)
           userInput = input("Where do you want to move: ").lower()
-          
           if (userInput == "exit"):
               break
-          if (curr_location.directions[userInput] != None):
+          elif (curr_location.directions[userInput] != None):
             curr_location = env['map'][curr_location.directions[userInput]]
             newRoom = True
           else:
-            print("No Door in that direction")
-            newRoom = False
-  else:
-    raise SyntaxError("unknown tree")
-  
+              print("No Door in that direction")
+              newRoom = False
+    else:
+        raise SyntaxError("unknown tree")
+
+
 parser = Lark(my_grammar)
-program = "(A 10 by 10 [north wall -> B]) (B 20 by 10 [south wall -> A])."
+program = """
+(A 10 by 15 [north wall -> B]) (B 5 by 10 [south wall -> A] [east wall -> C]) (C 5 by 5 [west wall -> B]).
+"""
+
+env = {
+    'map': {}
+}
 parse_tree = parser.parse(program)
 #print(parse_tree.pretty())
-env = {
-  'curr_id': 0,
-  'size': [],
-  'direction': None,
-  'location': None,
-  'curr_room': None,
-  'room': None,
-  'already_made': [None],
-  'door_count': 0,
-  'map': {},
-  'doors': {
-    "north": None,
-    "south": None,
-    "east": None,
-    "west": None,
-   } 
-}
-run_tree(parse_tree, env)
-
-
+print(run_tree(parse_tree, env))
