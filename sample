@@ -1,9 +1,6 @@
 Sample programs
 
-This one is the only one that will work as intended 
 1) (A 50 by 40 [north wall -> B]) (B 30 by 30 [south wall -> A]).
-
-The rest will parse correctly but will not give desired output
 2)(A 50 by 40 [north wall -> B]) (B 30 by 30 [south wall -> A] [east wall -> C]) (C 5 by 5 [west wall -> B]).
 3) (A 50 by 40 [north wall -> B]) (B 30 by 30 [south wall -> A] [east wall -> C]) (C 5 by 5 [west wall -> B] [south wall -> D] )(D 20 by 5 [north wall -> C]).
 
