@@ -24,6 +24,9 @@ that persisted the entire time of development, and that is I can only have two r
 I dont really know how to fix this but in my sample programs I will list the capablities but noting that they will not run
 due to these massive errors in my code
 
+Also you can look at the House.py to understand what the final outcome was supposed to look like but I had difficulty putting that into
+the final project
+
 (3) gives me clear instructions on how to run your code from the command line. 
 
 To run from command line it is a simple python script so 
