@@ -19,13 +19,7 @@ you can then choose to move "North", "South","East", or "West" and to end this p
 
 (2) tells me any interesting things I should take note of in your grammar or code
 
-There isn't anything really that intereting about the program however it is important to note that I had two errors
-that persisted the entire time of development, and that is I can only have two rooms and that my doors lead to every room
-I dont really know how to fix this but in my sample programs I will list the capablities but noting that they will not run
-due to these massive errors in my code
-
-Also you can look at the House.py to understand what the final outcome was supposed to look like but I had difficulty putting that into
-the final project
+*** rewrite since fixing the errors***
 
 (3) gives me clear instructions on how to run your code from the command line. 
 
