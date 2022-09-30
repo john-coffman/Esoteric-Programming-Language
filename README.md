@@ -1,6 +1,7 @@
 # PL
 
-(1) describes in detail the language you're parsing
+(1) describes in detail the language you're parsing 
+
 The Language I am parsing is an English to ascii layout that resembles rooms.
 
 To make a room you must give an string of id, a width and hieght of the room, followed by a door. 
